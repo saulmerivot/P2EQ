@@ -1,0 +1,12 @@
+# build output and local material
+build/
+dist/
+renders/
+_installers/
+JUCE/
+*.user
+.vs/
+.DS_Store
+# reference images from the design process (not part of the plugin)
+assets/skin/reference.png
+assets/skin/contact_sheet.png

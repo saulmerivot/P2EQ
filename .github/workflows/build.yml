@@ -1,0 +1,81 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            name: mac
+          - os: windows-latest
+            name: win64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        shell: bash
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build SplitTool (DSP self-test)
+        shell: bash
+        run: cmake --build build --config Release --target SplitTool --parallel 4
+
+      - name: DSP tests
+        shell: bash
+        run: |
+          EXE=$(find build -type f \( -name SplitTool -o -name SplitTool.exe \) | head -1)
+          echo "running $EXE"
+          "$EXE"
+
+      - name: Build plugin (VST3, Standalone, AU on macOS)
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = "macOS" ]; then
+            cmake --build build --config Release --target PirateEQ2_VST3 PirateEQ2_AU PirateEQ2_Standalone --parallel 4
+          else
+            cmake --build build --config Release --target PirateEQ2_VST3 PirateEQ2_Standalone --parallel 4
+          fi
+
+      - name: Package (macOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          OUT=P2EQ-beta-mac
+          mkdir -p "$OUT"
+          A=build/PirateEQ2_artefacts/Release
+          cp -R "$A/VST3/P2EQ.vst3" "$OUT/"
+          cp -R "$A/AU/P2EQ.component" "$OUT/"
+          cp -R "$A/Standalone/P2EQ.app" "$OUT/"
+          # ad-hoc signature (free): required for arm64 code to load; does NOT remove the Gatekeeper prompt
+          for f in "$OUT"/P2EQ.vst3 "$OUT"/P2EQ.component "$OUT"/P2EQ.app; do codesign --force --deep -s - "$f"; done
+          cp dist-docs/LEIA-ME-MAC.txt "$OUT/LEIA-ME.txt"
+          cp assets/fonts/OFL-MetalMania.txt "$OUT/"
+          lipo -archs "$OUT/P2EQ.vst3/Contents/MacOS/P2EQ"
+          ditto -c -k --keepParent "$OUT" P2EQ-beta-mac.zip
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $out = "P2EQ-beta-win64"
+          New-Item -ItemType Directory -Force $out | Out-Null
+          $a = "build/PirateEQ2_artefacts/Release"
+          Copy-Item -Recurse "$a/VST3/P2EQ.vst3" $out
+          Copy-Item "$a/Standalone/P2EQ.exe" $out
+          Copy-Item "dist-docs/LEIA-ME-WIN.txt" "$out/LEIA-ME.txt"
+          Copy-Item "assets/fonts/OFL-MetalMania.txt" $out
+          Compress-Archive -Path "$out/*" -DestinationPath P2EQ-beta-win64.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: P2EQ-${{ matrix.name }}
+          path: P2EQ-beta-*.zip

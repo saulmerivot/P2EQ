@@ -1,0 +1,47 @@
+P2EQ beta (macOS, Apple Silicon + Intel) - St. Punk
+===================================================
+
+EQ que divide o som em TRANSIENT (ataques) e TONAL (corpo/sustentação) e equaliza cada parte
+separadamente. Tem saturação (SAT) e dois visuais: NORMAL e OLD IS KOOL.
+Obrigado por testar! É uma versão beta: pode ter bugs.
+
+INSTALAR
+1. Feche o DAW.
+2. Copie os plugins para as pastas do sistema (Finder: menu Ir > Ir para a Pasta...):
+     P2EQ.vst3       ->  /Library/Audio/Plug-Ins/VST3/
+     P2EQ.component  ->  /Library/Audio/Plug-Ins/Components/     (Logic / GarageBand / Ableton AU)
+   (ou ~/Library/Audio/Plug-Ins/... para instalar só para o seu usuário, sem senha)
+3. IMPORTANTE - o macOS bloqueia plugins baixados da internet. Abra o Terminal e rode, UMA vez:
+
+     sudo xattr -dr com.apple.quarantine /Library/Audio/Plug-Ins/VST3/P2EQ.vst3
+     sudo xattr -dr com.apple.quarantine /Library/Audio/Plug-Ins/Components/P2EQ.component
+
+   (se instalou na pasta do usuário, tire o "sudo" e use ~/Library/... no caminho)
+   Para o app standalone (P2EQ.app): clique com o botão direito > Abrir > Abrir.
+4. Abra o DAW e faça o rescan:
+   - Ableton: Preferences > Plug-Ins > Rescan (VST3 e AU)
+   - Logic: abra o Plug-in Manager e clique em "Reset & Rescan Selection"; o P2EQ aparece em Audio Units
+   - Reaper/FL Studio: re-scan nas preferências de plugins
+5. Ele aparece como "P2EQ" (fabricante "St. Punk").
+
+COMO USAR (o básico)
+- No gráfico: duplo clique cria uma banda; arraste para frequência/ganho; roda = Q; botão direito remove.
+- Cada banda tem dois lados: triângulo de CIMA = só Transient, de BAIXO = só Tonal.
+  Ex.: puxe o de cima numa banda em ~80 Hz para dar "punch" no kick sem embolar o grave.
+- SPLIT (embaixo): Separation decide o quanto vira Transient; Decay estica o ataque; Smooth suaviza.
+  Use "Solo Transient"/"Solo Tonal" para ouvir cada parte.
+- SAT (canto superior direito): saturação com 5 estilos (S T P N K); DSTRCT = muito mais drive;
+  o alvo Both/Trans/Tonal satura só uma das partes.
+
+LATÊNCIA
+~4800 samples (~109 ms a 44.1 kHz), compensada automaticamente pelo DAW.
+Bom para mix/master; não use numa faixa que você está gravando/monitorando ao vivo.
+Use buffer de áudio de 256 ou mais.
+
+FEEDBACK (o que mais ajuda)
+- Modelo do Mac (Apple Silicon / Intel), versão do macOS, DAW e versão, buffer
+- O que você fez, o que esperava, o que aconteceu (print ou vídeo curto ajuda muito)
+- Como soou: o split separou bem? a saturação ficou boa? algum estalo/chiado?
+
+Créditos/licenças: fonte "Metal Mania" (SIL Open Font License, ver OFL-MetalMania.txt).
+Feito por St. Punk! (stpunk.art) com JUCE (juce.com). Plugin gratuito, não comercial.

@@ -1,0 +1,43 @@
+P2EQ 0.9.3 beta (Windows 10/11, 64-bit) - St. Punk
+====================================================
+
+EQ que divide o som em TRANSIENT (ataques) e TONAL (corpo/sustentação) e equaliza cada parte
+separadamente. Tem saturação (SAT) e dois visuais: NORMAL e OLD IS KOOL.
+
+Obrigado por testar! É uma versão beta: pode ter bugs.
+
+INSTALAR
+1. Feche o DAW.
+2. Copie a pasta "P2EQ.vst3" para:  C:\Program Files\Common Files\VST3\
+   (o Windows vai pedir permissão de administrador)
+3. Abra o DAW e faça o rescan de plugins:
+   - Ableton: Options > Preferences > Plug-Ins > ligar "Use VST3 Plug-In System Folders" > Rescan
+   - FL Studio: Options > Manage plugins > Find installed plugins
+   - Reaper: Options > Preferences > VST > Re-scan
+4. Ele aparece como "P2EQ" (fabricante "St. Punk").
+O "P2EQ.exe" é uma versão standalone (abre sem DAW, usando a entrada de áudio do PC).
+Se o Windows avisar "o Windows protegeu o computador", clique em "Mais informações" > "Executar assim mesmo"
+(o programa não é assinado digitalmente, por ser beta).
+
+COMO USAR (o básico)
+- No gráfico: duplo clique cria uma banda; arraste para mudar frequência/ganho; roda do mouse = Q;
+  botão direito remove.
+- Cada banda tem dois lados: triângulo de CIMA = só Transient, triângulo de BAIXO = só Tonal.
+  Ex.: puxe o de cima numa banda em ~80 Hz para dar "punch" no kick sem embolar o grave.
+- SPLIT (embaixo): Separation decide o quanto vira Transient; Decay estica o ataque; Smooth suaviza.
+  Use "Solo Transient"/"Solo Tonal" para ouvir cada parte separada.
+- SAT (canto superior direito): saturação com 5 estilos (S T P N K), DSTRCT = muito mais drive,
+  e o alvo Both/Trans/Tonal satura só uma das partes.
+
+LATÊNCIA
+~4800 samples (~109 ms a 44.1 kHz), compensada automaticamente pelo DAW.
+Bom para mix/master; não use numa faixa que você está gravando/monitorando ao vivo.
+Use buffer de áudio de 256 ou mais.
+
+FEEDBACK (o que mais ajuda)
+- DAW e versão, buffer de áudio, PC (processador)
+- O que você fez, o que esperava, o que aconteceu (print ou vídeo curto ajuda muito)
+- Como soou: o split separou bem? a saturação ficou boa? algum estalo/chiado?
+
+Créditos/licenças: fonte "Metal Mania" (SIL Open Font License, ver OFL-MetalMania.txt).
+Feito por St. Punk! (stpunk.art) com JUCE (juce.com). Plugin gratuito, não comercial.
